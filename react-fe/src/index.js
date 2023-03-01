@@ -2,15 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './assets/scss/index.scss'
 import reportWebVitals from './reportWebVitals';
-import Admin from './components/admin/Layout';
-import Shop from './components/shop/Layout';
+import App from './components/App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Admin />
-
-    <Shop />
+    <App />
   </React.StrictMode>
 );
 
