@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import AuthService from "../../../service/admin/AuthService";
 
 class RegisterComponent extends Component {
 
@@ -42,7 +43,20 @@ class RegisterComponent extends Component {
             event.preventDefault();
             event.stopPropagation();
         } else {
-            toast.success("Successfully registered. Please login to continue !")
+            event.preventDefault();
+            const data = {
+                username: this.state.username,
+                email: this.state.email,
+                password: this.state.password
+            }
+            AuthService.register(data)
+                .then(function (response) {
+                    console.log("🚀 ~ file: RegisterComponent ~ response:", response)
+                    toast.success("Successfully registered. Please login to continue !")
+                })
+                .catch(function (error) {
+                    console.log("🚀 ~ file: RegisterComponent ~ error:", error)
+                })
         }
         this.setState({
             validated: true
