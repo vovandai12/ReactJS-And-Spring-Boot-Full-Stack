@@ -51,11 +51,10 @@ class RegisterComponent extends Component {
             }
             AuthService.register(data)
                 .then(function (response) {
-                    console.log("🚀 ~ file: RegisterComponent ~ response:", response)
-                    toast.success("Successfully registered. Please login to continue !")
+                    toast.success(response.message);
                 })
                 .catch(function (error) {
-                    console.log("🚀 ~ file: RegisterComponent ~ error:", error)
+                    toast.error(error);
                 })
         }
         this.setState({
@@ -66,6 +65,11 @@ class RegisterComponent extends Component {
     render() {
 
         const { validated } = this.state;
+
+        // if (this.state.redirect) {
+        //     return <Navigate to="/todo" />;
+        // }
+        // import { BrowserRouter, Routes, Route } from "react-router-dom";
 
         return (
             <>

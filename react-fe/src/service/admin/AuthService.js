@@ -1,6 +1,6 @@
 import http from '../../common/HttpCommon'
 
-class AuthService {
+const AuthService = {
     async register(data) {
         return await http.post('/auth/register', data);
     }

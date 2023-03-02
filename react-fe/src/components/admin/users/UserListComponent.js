@@ -2,11 +2,20 @@ import React, { Component } from "react";
 import ViewUserComponent from "./ViewUserComponent";
 import { Table, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import UserService from "../../../service/admin/UserService";
 
 class UserListComponent extends Component {
 
     state = {
-        show: false
+        show: false,
+        arr: []
+    }
+
+    async componentDidMount() {
+        const response = await UserService.findAll();
+        this.setState({
+            arr: response.data.data
+        })
     }
 
     onHide = () => {
@@ -19,7 +28,7 @@ class UserListComponent extends Component {
 
     render() {
 
-        const { show } = this.state;
+        const { show, arr } = this.state;
 
         return (
             <>
@@ -31,28 +40,37 @@ class UserListComponent extends Component {
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
+                            <th>Role</th>
                             <th>Avatar</th>
                             <th>Last login</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>User name 1</td>
-                            <td>First Name</td>
-                            <td>Last Name</td>
-                            <td>example@.domain</td>
-                            <td>Avatar</td>
-                            <td>01/03/2023</td>
-                            <td>
-                                <Button variant="info"
-                                    onClick={() => this.setState({ show: true })}>View</Button>{' '}
-                                <Button variant="warning">Edit</Button>{' '}
-                                <Button variant="danger"
-                                    onClick={() => this.handleDelete()}>Delete</Button>
-                            </td>
-                        </tr>
+                        {
+                            arr && arr.length > 0 &&
+                            arr.map((item, index) => {
+                                return (
+                                    <tr key={item.id}>
+                                        <td>{index + 1}</td>
+                                        <td>{item.userName}</td>
+                                        <td>{item.firstName}</td>
+                                        <td>{item.lastName}</td>
+                                        <td>{item.email}</td>
+                                        <td>{item.role}</td>
+                                        <td>{item.avatar}</td>
+                                        <td>{item.lastLoginDate}</td>
+                                        <td>
+                                            <Button variant="info"
+                                                onClick={() => this.setState({ show: true })}>View</Button>{' '}
+                                            <Button variant="warning">Edit</Button>{' '}
+                                            <Button variant="danger"
+                                                onClick={() => this.handleDelete()}>Delete</Button>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        }
                     </tbody>
                 </Table>
 

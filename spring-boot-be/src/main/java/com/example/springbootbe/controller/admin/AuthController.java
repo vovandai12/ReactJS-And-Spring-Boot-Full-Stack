@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.springbootbe.common.Role;
 import com.example.springbootbe.model.User;
 import com.example.springbootbe.payload.request.RegisterRequest;
 import com.example.springbootbe.payload.response.MessageResponse;
@@ -37,12 +38,15 @@ public class AuthController {
 		user.setUserName(registerRequest.getEmail());
 		user.setEmail(registerRequest.getEmail());
 		user.setPassword(registerRequest.getPassword());
+		user.setLogin(true);
+		user.setRole(Role.ROLE_ADMIN);
 		Optional<User> userOld = userService.saveOrUpdate(user);
 		if (userOld.isEmpty())
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new MessageResponse("INTERNAL_SERVER_ERROR"));
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(new MessageResponse(userOld.get().getFullName() + " registered successfully!"));
+				.body(new MessageResponse(
+						userOld.get().getUserName() + " registered successfully. Please login to continue!"));
 	}
 
 }

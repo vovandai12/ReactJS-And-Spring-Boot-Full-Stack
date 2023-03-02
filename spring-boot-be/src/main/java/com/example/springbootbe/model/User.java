@@ -42,7 +42,7 @@ public class User extends Auditable implements Serializable {
     private String id;
 
     @Column(name = "first_name")
-    private String fullName;
+    private String firstName;
 
     @Column(name = "last_name")
     private String lastName;
