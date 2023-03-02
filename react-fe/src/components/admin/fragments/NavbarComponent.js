@@ -19,7 +19,7 @@ class NavbarComponent extends Component {
                             <Nav.Link href="">Order</Nav.Link>
                             <NavDropdown title="Account" id="basic-nav-dropdown">
                                 <NavDropdown.Item href="">Login</NavDropdown.Item>
-                                <NavDropdown.Item href="">Register</NavDropdown.Item>
+                                <NavDropdown.Item as={NavLink} to="/register">Register</NavDropdown.Item>
                                 <NavDropdown.Item href="">Change information</NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item href="">Logout</NavDropdown.Item>
