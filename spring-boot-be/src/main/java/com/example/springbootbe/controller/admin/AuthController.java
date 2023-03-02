@@ -35,7 +35,7 @@ public class AuthController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Email has been used!"));
 		}
 		User user = new User();
-		user.setUserName(registerRequest.getEmail());
+		user.setUserName(registerRequest.getUserName());
 		user.setEmail(registerRequest.getEmail());
 		user.setPassword(registerRequest.getPassword());
 		user.setLogin(true);

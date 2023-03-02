@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import ViewUserComponent from "./ViewUserComponent";
 import { Table, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from "react-bootstrap-table2-paginator";
+import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import UserService from "../../../service/admin/UserService";
 
 class UserListComponent extends Component {
@@ -11,12 +14,22 @@ class UserListComponent extends Component {
         arr: []
     }
 
-    async componentDidMount() {
+    componentDidMount() {
+        this.fetchData();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.someProp !== this.props.someProp) {
+            this.fetchData();
+        }
+    }
+
+    fetchData = async () => {
         const response = await UserService.findAll();
         this.setState({
-            arr: response.data.data
+            arr: response && response.data && response.data.data ? response.data.data : []
         })
-    }
+    };
 
     onHide = () => {
         this.setState({ show: false })
@@ -29,10 +42,60 @@ class UserListComponent extends Component {
     render() {
 
         const { show, arr } = this.state;
+        const columns = [{
+            dataField: "id",
+            hidden: true
+        }, {
+            dataField: 'userName',
+            text: 'Username',
+            sort: true,
+            filter: textFilter()
+        }, {
+            dataField: 'firstName',
+            text: 'First Name',
+            sort: true,
+            filter: textFilter()
+        }, {
+            dataField: 'lastName',
+            text: 'Last Name',
+            sort: true,
+            filter: textFilter()
+        }, {
+            dataField: 'email',
+            text: 'Email',
+            sort: true,
+            filter: textFilter()
+        }, {
+            dataField: 'role',
+            text: 'Role',
+            sort: true
+        }, {
+            dataField: 'avatar',
+            text: 'Avatar',
+            sort: true
+        }, {
+            dataField: 'lastLoginDate',
+            text: 'Last login',
+            sort: true
+        }];
+        const defaultSorted = [{
+            dataField: 'id',
+            order: 'desc'
+        }];
 
         return (
             <>
-                <Table striped bordered hover className="mt-3">
+                <BootstrapTable
+                    bootstrap4
+                    keyField="id"
+                    data={arr}
+                    columns={columns}
+                    defaultSorted={defaultSorted}
+                    pagination={paginationFactory()}
+                    filter={filterFactory()}
+                />
+
+                {/* <Table striped bordered hover className="mt-3">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -76,7 +139,7 @@ class UserListComponent extends Component {
 
                 <ViewUserComponent
                     show={show}
-                    onHide={() => this.onHide()} />
+                    onHide={() => this.onHide()} /> */}
             </>
         )
     }

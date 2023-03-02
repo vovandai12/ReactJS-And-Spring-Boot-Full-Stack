@@ -45,7 +45,7 @@ class RegisterComponent extends Component {
         } else {
             event.preventDefault();
             const data = {
-                username: this.state.username,
+                userName: this.state.username,
                 email: this.state.email,
                 password: this.state.password
             }
