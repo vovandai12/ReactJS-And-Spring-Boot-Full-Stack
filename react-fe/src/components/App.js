@@ -6,6 +6,7 @@ import Admin from './admin/Layout';
 import HomeAdmin from './admin/home/HomeComponent';
 import ListUserAdmin from './admin/users/UserListComponent'
 import RegisterAdmin from './admin/auth/RegisterComponent';
+import ChangeInformationComponent from './admin/auth/ChangeInformationComponent';
 import Shop from './shop/Layout';
 
 function App() {
@@ -16,9 +17,10 @@ function App() {
                 <Routes>
 
                     <Route element={<Admin />}>
-                        <Route path="/home" element={<HomeAdmin />} />
+                        <Route path="" element={<HomeAdmin />} />
                         <Route path="/users" element={<ListUserAdmin />} />
                         <Route path="/register" element={<RegisterAdmin />} />
+                        <Route path="/change-information" element={<ChangeInformationComponent />} />
                     </Route>
 
                     <Route element={<Shop />}>

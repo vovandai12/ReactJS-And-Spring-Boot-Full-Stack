@@ -7,11 +7,11 @@ class NavbarComponent extends Component {
         return (
             <>
                 <Navbar bg="light" expand="lg">
-                    <Navbar.Brand as={NavLink} to="/home">Admin</Navbar.Brand>
+                    <Navbar.Brand as={NavLink} to="">Admin</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
-                            <Nav.Link as={NavLink} to="/home">Home</Nav.Link>
+                            <Nav.Link as={NavLink} to="">Home</Nav.Link>
                             <Nav.Link as={NavLink} to="/users">User</Nav.Link>
                             <Nav.Link href="">Category</Nav.Link>
                             <Nav.Link href="">Product</Nav.Link>
@@ -20,7 +20,7 @@ class NavbarComponent extends Component {
                             <NavDropdown title="Account" id="basic-nav-dropdown">
                                 <NavDropdown.Item href="">Login</NavDropdown.Item>
                                 <NavDropdown.Item as={NavLink} to="/register">Register</NavDropdown.Item>
-                                <NavDropdown.Item href="">Change information</NavDropdown.Item>
+                                <NavDropdown.Item as={NavLink} to="/change-information">Change information</NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item href="">Logout</NavDropdown.Item>
                             </NavDropdown>
