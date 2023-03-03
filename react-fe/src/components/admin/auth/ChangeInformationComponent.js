@@ -139,7 +139,7 @@ class ChangeInformationComponent extends Component {
                                 <Form.Label>Avatar:</Form.Label>
                                 <Form.File id="imgSrc" onChange={(event) => this.handleChangeImgSrc(event)} />
                             </Form.Group> */}
-                            <Form.Group>
+                            {/* <Form.Group>
                                 <Form.File id="imgSrc" label="Example file input" onChange={(event) => this.handleChangeImgSrc(event)} />
                             </Form.Group>
                             {imgSrc !== '' &&
@@ -148,7 +148,7 @@ class ChangeInformationComponent extends Component {
                                         <Card.Img variant="top" src={imgSrc} alt="avatar" />
                                     </Card>
                                 )
-                            }
+                            } */}
 
                             <Button variant="primary" type="submit">
                                 Submit
