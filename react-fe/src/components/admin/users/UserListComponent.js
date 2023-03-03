@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ViewUserComponent from "./ViewUserComponent";
-import { Table, Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from "react-bootstrap-table2-paginator";
@@ -11,37 +11,35 @@ class UserListComponent extends Component {
 
     state = {
         show: false,
+        loading: false,
         arr: []
     }
 
     componentDidMount() {
-        this.fetchData();
-    }
-
-    componentDidUpdate(prevProps) {
-        if (prevProps.someProp !== this.props.someProp) {
-            this.fetchData();
-        }
-    }
-
-    fetchData = async () => {
-        const response = await UserService.findAll();
         this.setState({
-            arr: response && response.data && response.data.data ? response.data.data : []
+            loading: true
         })
-    };
+        UserService.findAll()
+            .then(response => {
+                this.setState({
+                    arr: response && response.data && response.data.data ? response.data.data : [],
+                    loading: false
+                })
+            })
+    }
 
     onHide = () => {
         this.setState({ show: false })
     }
 
-    handleDelete = () => {
+    handleDelete = (row) => {
+        console.log("🚀 ~ file: row:", row.id)
         toast.error("handleDelete");
     }
 
     render() {
 
-        const { show, arr } = this.state;
+        const { show, arr, loading } = this.state;
         const columns = [{
             dataField: "id",
             hidden: true
@@ -54,12 +52,22 @@ class UserListComponent extends Component {
             dataField: 'firstName',
             text: 'First Name',
             sort: true,
-            filter: textFilter()
+            filter: textFilter(),
+            formatter: (cell, row) => (
+                <span>
+                    {cell ? cell : <p className="text-danger">NoUpdate...</p>}
+                </span>
+            )
         }, {
             dataField: 'lastName',
             text: 'Last Name',
             sort: true,
-            filter: textFilter()
+            filter: textFilter(),
+            formatter: (cell, row) => (
+                <span>
+                    {cell ? cell : <p className="text-danger">NoUpdate...</p>}
+                </span>
+            )
         }, {
             dataField: 'email',
             text: 'Email',
@@ -68,20 +76,57 @@ class UserListComponent extends Component {
         }, {
             dataField: 'role',
             text: 'Role',
-            sort: true
+            sort: true,
+            formatter: (cell, row) => {
+                if (row.role === 'ROLE_ADMIN') {
+                    return (
+                        <span> Admin</span>
+                    );
+                } else {
+                    return (
+                        <span> User</span>
+                    );
+                }
+            }
         }, {
             dataField: 'avatar',
             text: 'Avatar',
-            sort: true
+            sort: true,
+            formatter: (cell, row) => (
+                <span>
+                    {cell ? cell : <p className="text-danger">NoUpdate...</p>}
+                </span>
+            )
         }, {
             dataField: 'lastLoginDate',
             text: 'Last login',
-            sort: true
+            sort: true,
+            formatter: (cell, row) => (
+                <span>
+                    {cell ? cell : <p className="text-danger">NoUpdate...</p>}
+                </span>
+            )
+        }, {
+            dataField: '',
+            text: 'Action',
+            formatter: (cell, row) => (
+                <>
+                    <Button variant="info"
+                        onClick={() => this.setState({ show: true })}>View</Button>{' '}
+                    <Button variant="warning">Edit</Button>{' '}
+                    <Button variant="danger"
+                        onClick={() => this.handleDelete(row)}>Delete</Button>
+                </>
+            )
         }];
         const defaultSorted = [{
             dataField: 'id',
             order: 'desc'
         }];
+
+        if (loading) {
+            return <Spinner animation="border" />;
+        }
 
         return (
             <>
@@ -95,51 +140,9 @@ class UserListComponent extends Component {
                     filter={filterFactory()}
                 />
 
-                {/* <Table striped bordered hover className="mt-3">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Username</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Avatar</th>
-                            <th>Last login</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            arr && arr.length > 0 &&
-                            arr.map((item, index) => {
-                                return (
-                                    <tr key={item.id}>
-                                        <td>{index + 1}</td>
-                                        <td>{item.userName}</td>
-                                        <td>{item.firstName}</td>
-                                        <td>{item.lastName}</td>
-                                        <td>{item.email}</td>
-                                        <td>{item.role}</td>
-                                        <td>{item.avatar}</td>
-                                        <td>{item.lastLoginDate}</td>
-                                        <td>
-                                            <Button variant="info"
-                                                onClick={() => this.setState({ show: true })}>View</Button>{' '}
-                                            <Button variant="warning">Edit</Button>{' '}
-                                            <Button variant="danger"
-                                                onClick={() => this.handleDelete()}>Delete</Button>
-                                        </td>
-                                    </tr>
-                                )
-                            })
-                        }
-                    </tbody>
-                </Table>
-
                 <ViewUserComponent
                     show={show}
-                    onHide={() => this.onHide()} /> */}
+                    onHide={() => this.onHide()} />
             </>
         )
     }

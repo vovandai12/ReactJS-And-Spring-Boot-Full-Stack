@@ -1,5 +1,6 @@
 import React from 'react';
 import '../assets/scss/App.scss';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Admin from './admin/Layout';
 import HomeAdmin from './admin/home/HomeComponent';
