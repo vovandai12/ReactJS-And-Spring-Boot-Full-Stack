@@ -7,6 +7,7 @@ import HomeAdmin from './admin/home/HomeComponent';
 import ListUserAdmin from './admin/users/UserListComponent'
 import RegisterAdmin from './admin/auth/RegisterComponent';
 import ChangeInformationComponent from './admin/auth/ChangeInformationComponent';
+import LoginComponent from './admin/auth/LoginComponent';
 import Shop from './shop/Layout';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                         <Route path="/users" element={<ListUserAdmin />} />
                         <Route path="/register" element={<RegisterAdmin />} />
                         <Route path="/change-information" element={<ChangeInformationComponent />} />
+                        <Route path="/login" element={<LoginComponent />} />
                     </Route>
 
                     <Route element={<Shop />}>

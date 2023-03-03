@@ -5,6 +5,10 @@ const AuthService = {
         return await http.post('/auth/register', data);
     },
 
+    async login(data) {
+        return await http.post('/auth/login', data);
+    },
+
     async changeInformation(data) {
         return await http.post('/auth/change-information', data, {
             headers: {

@@ -2,14 +2,14 @@ import React, { Component } from "react";
 import { Form, Button, Row, Col, Card } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import AuthService from "../../../service/admin/AuthService";
+import { connect } from 'react-redux';
+import { authenticate, authFailure, authSuccess } from '../../../store/actions/AuthAction';
 
-class RegisterComponent extends Component {
+class LoginComponent extends Component {
 
     state = {
         username: '',
-        email: '',
         password: '',
-        agree: false,
         validated: false,
     }
 
@@ -19,21 +19,9 @@ class RegisterComponent extends Component {
         })
     };
 
-    handleChangeEmail = (event) => {
-        this.setState({
-            email: event.target.value
-        })
-    };
-
     handleChangePassword = (event) => {
         this.setState({
             password: event.target.value
-        })
-    };
-
-    handleChangeAgree = (event) => {
-        this.setState({
-            agree: event.target.checked
         })
     };
 
@@ -44,17 +32,32 @@ class RegisterComponent extends Component {
             event.stopPropagation();
         } else {
             event.preventDefault();
+            this.props.authenticate();
             const data = {
                 userName: this.state.username,
-                email: this.state.email,
                 password: this.state.password
             }
-            AuthService.register(data)
+            AuthService.login(data)
                 .then(function (response) {
                     toast.success(response.message);
+                    this.props.setUser(response.data);
+                    this.props.history.push('');
                 })
                 .catch(function (error) {
                     toast.error(error);
+                    if (error && error.response) {
+                        switch (error.response.status) {
+                            case 401:
+                                console.log("401 status");
+                                this.props.loginFailure("Authentication Failed.Bad Credentials");
+                                break;
+                            default:
+                                this.props.loginFailure('Something Wrong!Please Try Again');
+                        }
+                    }
+                    else {
+                        this.props.loginFailure('Something Wrong!Please Try Again');
+                    }
                 })
         }
         this.setState({
@@ -77,7 +80,7 @@ class RegisterComponent extends Component {
                     <Col md={{ span: 6, offset: 3 }}>
                         <Form noValidate validated={validated} onSubmit={(event) => this.onSubmit(event)}>
                             <Card>
-                                <Card.Header>Register</Card.Header>
+                                <Card.Header>Login</Card.Header>
                                 <Card.Body>
                                     <Form.Group controlId="username">
                                         <Form.Label>Username:</Form.Label>
@@ -88,15 +91,6 @@ class RegisterComponent extends Component {
                                         <Form.Control.Feedback type="invalid">Please enter a username.</Form.Control.Feedback>
                                     </Form.Group>
 
-                                    <Form.Group controlId="email">
-                                        <Form.Label>Email</Form.Label>
-                                        <Form.Control type="email" placeholder="Enter email"
-                                            value={this.state.email}
-                                            onChange={(event) => this.handleChangeEmail(event)}
-                                            required />
-                                        <Form.Control.Feedback type="invalid">Please enter a valid email address.</Form.Control.Feedback>
-                                    </Form.Group>
-
                                     <Form.Group controlId="password">
                                         <Form.Label>Password</Form.Label>
                                         <Form.Control type="password" placeholder="Enter password"
@@ -104,14 +98,6 @@ class RegisterComponent extends Component {
                                             onChange={(event) => this.handleChangePassword(event)}
                                             required />
                                         <Form.Control.Feedback type="invalid">Please enter a password.</Form.Control.Feedback>
-                                    </Form.Group>
-
-                                    <Form.Group controlId="agree">
-                                        <Form.Check type="checkbox" label="I agree to the terms and conditions"
-                                            checked={this.state.agree}
-                                            onChange={(event) => this.handleChangeAgree(event)}
-                                            required />
-                                        <Form.Control.Feedback type="invalid">Please agree to the terms and conditions.</Form.Control.Feedback>
                                     </Form.Group>
                                 </Card.Body>
                                 <Card.Footer>
@@ -128,4 +114,20 @@ class RegisterComponent extends Component {
     }
 }
 
-export default RegisterComponent;
+const mapStateToProps = ({ auth }) => {
+    console.log("state ", auth)
+    return {
+        loading: auth.loading,
+        error: auth.error
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        authenticate: () => dispatch(authenticate()),
+        setUser: (data) => dispatch(authSuccess(data)),
+        loginFailure: (message) => dispatch(authFailure(message))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginComponent);

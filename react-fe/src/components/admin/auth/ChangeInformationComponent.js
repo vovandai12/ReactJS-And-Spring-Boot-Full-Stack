@@ -91,55 +91,58 @@ class ChangeInformationComponent extends Component {
                 <Row className="mt-3">
                     <Col md={{ span: 6, offset: 3 }}>
                         <Form noValidate validated={validated} onSubmit={(event) => this.onSubmit(event)}>
-                            <Form.Group controlId="firstName">
-                                <Form.Label>First name:</Form.Label>
-                                <Form.Control type="text" placeholder="Enter first name"
-                                    value={this.state.firstName}
-                                    onChange={(event) => this.handleChangeFirstName(event)}
-                                    required />
-                                <Form.Control.Feedback type="invalid">Please enter a first name.</Form.Control.Feedback>
-                            </Form.Group>
+                            <Card>
+                                <Card.Header>Change Information</Card.Header>
+                                <Card.Body>
+                                    <Form.Group controlId="firstName">
+                                        <Form.Label>First name:</Form.Label>
+                                        <Form.Control type="text" placeholder="Enter first name"
+                                            value={this.state.firstName}
+                                            onChange={(event) => this.handleChangeFirstName(event)}
+                                            required />
+                                        <Form.Control.Feedback type="invalid">Please enter a first name.</Form.Control.Feedback>
+                                    </Form.Group>
 
-                            <Form.Group controlId="lastName">
-                                <Form.Label>Last name:</Form.Label>
-                                <Form.Control type="text" placeholder="Enter last name"
-                                    value={this.state.lastName}
-                                    onChange={(event) => this.handleChangeLastName(event)}
-                                    required />
-                                <Form.Control.Feedback type="invalid">Please enter a last name.</Form.Control.Feedback>
-                            </Form.Group>
+                                    <Form.Group controlId="lastName">
+                                        <Form.Label>Last name:</Form.Label>
+                                        <Form.Control type="text" placeholder="Enter last name"
+                                            value={this.state.lastName}
+                                            onChange={(event) => this.handleChangeLastName(event)}
+                                            required />
+                                        <Form.Control.Feedback type="invalid">Please enter a last name.</Form.Control.Feedback>
+                                    </Form.Group>
 
-                            <Form.Group controlId="address">
-                                <Form.Label>Address:</Form.Label>
-                                <Form.Control type="text" placeholder="Enter address"
-                                    value={this.state.address}
-                                    onChange={(event) => this.handleChangeAddress(event)}
-                                    required />
-                                <Form.Control.Feedback type="invalid">Please enter a address.</Form.Control.Feedback>
-                            </Form.Group>
+                                    <Form.Group controlId="address">
+                                        <Form.Label>Address:</Form.Label>
+                                        <Form.Control type="text" placeholder="Enter address"
+                                            value={this.state.address}
+                                            onChange={(event) => this.handleChangeAddress(event)}
+                                            required />
+                                        <Form.Control.Feedback type="invalid">Please enter a address.</Form.Control.Feedback>
+                                    </Form.Group>
 
-                            <Form.Group controlId="birthDay">
-                                <Form.Label>Birth day:</Form.Label>
-                                <Form.Control type="text" placeholder="Enter birthDay"
-                                    value={this.state.birthDay}
-                                    onChange={(event) => this.handleChangeBirthDay(event)}
-                                    required />
-                                <Form.Control.Feedback type="invalid">Please enter a birthDay.</Form.Control.Feedback>
-                            </Form.Group>
+                                    <Form.Group controlId="birthDay">
+                                        <Form.Label>Birth day:</Form.Label>
+                                        <Form.Control type="text" placeholder="Enter birthDay"
+                                            value={this.state.birthDay}
+                                            onChange={(event) => this.handleChangeBirthDay(event)}
+                                            required />
+                                        <Form.Control.Feedback type="invalid">Please enter a birthDay.</Form.Control.Feedback>
+                                    </Form.Group>
 
-                            <Form.Group controlId="gender">
-                                <Form.Label>Gender:</Form.Label>
-                                <div onChange={(event) => this.handleChangeGender(event)}>
-                                    <Form.Check inline label="Male" name="gender" type="radio" id="inline1" checked value="true" />
-                                    <Form.Check inline label="Female" name="gender" type="radio" id="inline2" value="false" />
-                                </div>
-                            </Form.Group>
+                                    <Form.Group controlId="gender">
+                                        <Form.Label>Gender:</Form.Label>
+                                        <div onChange={(event) => this.handleChangeGender(event)}>
+                                            <Form.Check inline label="Male" name="gender" type="radio" id="inline1" checked value="true" />
+                                            <Form.Check inline label="Female" name="gender" type="radio" id="inline2" value="false" />
+                                        </div>
+                                    </Form.Group>
 
-                            {/* <Form.Group controlId="imgSrc">
+                                    {/* <Form.Group controlId="imgSrc">
                                 <Form.Label>Avatar:</Form.Label>
                                 <Form.File id="imgSrc" onChange={(event) => this.handleChangeImgSrc(event)} />
                             </Form.Group> */}
-                            {/* <Form.Group>
+                                    {/* <Form.Group>
                                 <Form.File id="imgSrc" label="Example file input" onChange={(event) => this.handleChangeImgSrc(event)} />
                             </Form.Group>
                             {imgSrc !== '' &&
@@ -149,10 +152,13 @@ class ChangeInformationComponent extends Component {
                                     </Card>
                                 )
                             } */}
-
-                            <Button variant="primary" type="submit">
-                                Submit
-                            </Button>
+                                </Card.Body>
+                                <Card.Footer>
+                                    <Button variant="primary" type="submit">
+                                        Submit
+                                    </Button>
+                                </Card.Footer>
+                            </Card>
                         </Form>
                     </Col>
                 </Row>
