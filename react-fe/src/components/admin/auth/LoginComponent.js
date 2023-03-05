@@ -3,15 +3,14 @@ import { Form, Button, Row, Col, Card } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import AuthService from "../../../service/admin/AuthService";
 import { connect } from 'react-redux';
-import { authenticate, authFailure, authSuccess } from '../../../store/actions/AuthAction';
 
 class LoginComponent extends Component {
 
     state = {
         username: '',
         password: '',
-        validated: false,
-    }
+        validated: false
+    };
 
     handleChangeUsername = (event) => {
         this.setState({
@@ -38,26 +37,31 @@ class LoginComponent extends Component {
                 password: this.state.password
             }
             AuthService.login(data)
-                .then(function (response) {
-                    toast.success(response.message);
-                    this.props.setUser(response.data);
+                .then(response => {
+                    toast.success(response.data.message);
+                    console.log("🚀 ~ file: ~ response:", response)
+                    this.props.authSuccess(response.data);
                     this.props.history.push('');
                 })
-                .catch(function (error) {
-                    toast.error(error);
+                .catch(error => {
                     if (error && error.response) {
                         switch (error.response.status) {
                             case 401:
-                                console.log("401 status");
-                                this.props.loginFailure("Authentication Failed.Bad Credentials");
+                                this.props.authFailure("Authentication Failed.Bad Credentials");
                                 break;
                             default:
-                                this.props.loginFailure('Something Wrong!Please Try Again');
+                                this.props.authFailure("Authentication Failed.Bad Credentials");
                         }
                     }
                     else {
-                        this.props.loginFailure('Something Wrong!Please Try Again');
+                        this.props.authFailure("Authentication Failed.Bad Credentials");
                     }
+                    this.props.authFailure("Authentication Failed.Bad Credentials");
+                    toast.error("Authentication Failed.Bad Credentials");
+                    this.setState({
+                        username: '',
+                        password: ''
+                    })
                 })
         }
         this.setState({
@@ -114,19 +118,27 @@ class LoginComponent extends Component {
     }
 }
 
-const mapStateToProps = ({ auth }) => {
-    console.log("state ", auth)
+const mapStateToProps = (state) => {
     return {
-        loading: auth.loading,
-        error: auth.error
+        user: state.user,
+        error: state.error,
+        isAuthenticated: state.isAuthenticated
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        authenticate: () => dispatch(authenticate()),
-        setUser: (data) => dispatch(authSuccess(data)),
-        loginFailure: (message) => dispatch(authFailure(message))
+        authenticate: () => dispatch({
+            type: 'AUTH_REQUEST'
+        }),
+        authSuccess: ({ data }) => dispatch({
+            type: 'AUTH_SUCCESS',
+            payload: data,
+        }),
+        authFailure: (error) => dispatch({
+            type: 'AUTH_FAILURE',
+            payload: error,
+        })
     }
 }
 

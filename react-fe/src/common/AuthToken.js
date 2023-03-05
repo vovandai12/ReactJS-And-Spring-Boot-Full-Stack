@@ -1,1 +1,1 @@
-export default localStorage.getItem('AUTH_TOKEN');
+export const AUTH_TOKEN = "accessToken";

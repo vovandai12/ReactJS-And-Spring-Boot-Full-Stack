@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './assets/scss/index.scss'
+import './assets/scss/index.scss';
 import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import App from './components/App';
-import RootReducer from './store/reducers/RootReducer';
+import RootReducer from './store/RootReducer';
 
 const store = createStore(RootReducer);
 
