@@ -1,8 +1,13 @@
-import http from '../../common/HttpCommon'
+import http from '../../common/HttpCommon';
+import { TOKEN } from '../../common/AuthToken';
 
 const UserService = {
     async findAll() {
-        return await http.get('/users');
+        return await http.get('/users', {
+            headers: {
+                "Authorization": "Bearer " + TOKEN,
+            }
+        });
     }
 }
 

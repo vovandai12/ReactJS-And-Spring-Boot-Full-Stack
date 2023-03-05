@@ -3,24 +3,21 @@ import { Form, Button, Row, Col, Card } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import AuthService from "../../../service/admin/AuthService";
 import { connect } from 'react-redux';
+import { authenticateAction, authSuccessAction, authFailureAction } from '../../../store/ActionReducer';
+import { Navigate } from "react-router-dom";
 
 class LoginComponent extends Component {
 
     state = {
         username: '',
         password: '',
-        validated: false
+        validated: false,
+        redirect: false
     };
 
-    handleChangeUsername = (event) => {
+    handleChange = (event) => {
         this.setState({
-            username: event.target.value
-        })
-    };
-
-    handleChangePassword = (event) => {
-        this.setState({
-            password: event.target.value
+            [event.target.name]: event.target.value
         })
     };
 
@@ -39,29 +36,20 @@ class LoginComponent extends Component {
             AuthService.login(data)
                 .then(response => {
                     toast.success(response.data.message);
-                    console.log("🚀 ~ file: ~ response:", response)
                     this.props.authSuccess(response.data);
-                    this.props.history.push('');
+                    this.setState({
+                        redirect: true
+                    })
                 })
                 .catch(error => {
                     if (error && error.response) {
-                        switch (error.response.status) {
-                            case 401:
-                                this.props.authFailure("Authentication Failed.Bad Credentials");
-                                break;
-                            default:
-                                this.props.authFailure("Authentication Failed.Bad Credentials");
-                        }
-                    }
-                    else {
                         this.props.authFailure("Authentication Failed.Bad Credentials");
+                        toast.error("Authentication Failed.Bad Credentials");
+                        this.setState({
+                            username: '',
+                            password: ''
+                        })
                     }
-                    this.props.authFailure("Authentication Failed.Bad Credentials");
-                    toast.error("Authentication Failed.Bad Credentials");
-                    this.setState({
-                        username: '',
-                        password: ''
-                    })
                 })
         }
         this.setState({
@@ -71,12 +59,11 @@ class LoginComponent extends Component {
 
     render() {
 
-        const { validated } = this.state;
+        const { validated, redirect } = this.state;
 
-        // if (this.state.redirect) {
-        //     return <Navigate to="/todo" />;
-        // }
-        // import { BrowserRouter, Routes, Route } from "react-router-dom";
+        if (redirect) {
+            return <Navigate to="/" />
+        }
 
         return (
             <>
@@ -90,7 +77,8 @@ class LoginComponent extends Component {
                                         <Form.Label>Username:</Form.Label>
                                         <Form.Control type="text" placeholder="Enter username"
                                             value={this.state.username}
-                                            onChange={(event) => this.handleChangeUsername(event)}
+                                            name="username"
+                                            onChange={(event) => this.handleChange(event)}
                                             required />
                                         <Form.Control.Feedback type="invalid">Please enter a username.</Form.Control.Feedback>
                                     </Form.Group>
@@ -99,7 +87,8 @@ class LoginComponent extends Component {
                                         <Form.Label>Password</Form.Label>
                                         <Form.Control type="password" placeholder="Enter password"
                                             value={this.state.password}
-                                            onChange={(event) => this.handleChangePassword(event)}
+                                            name="password"
+                                            onChange={(event) => this.handleChange(event)}
                                             required />
                                         <Form.Control.Feedback type="invalid">Please enter a password.</Form.Control.Feedback>
                                     </Form.Group>
@@ -128,17 +117,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        authenticate: () => dispatch({
-            type: 'AUTH_REQUEST'
-        }),
-        authSuccess: ({ data }) => dispatch({
-            type: 'AUTH_SUCCESS',
-            payload: data,
-        }),
-        authFailure: (error) => dispatch({
-            type: 'AUTH_FAILURE',
-            payload: error,
-        })
+        authenticate: () => dispatch(authenticateAction()),
+        authSuccess: (data) => dispatch(authSuccessAction(data)),
+        authFailure: (error) => dispatch(authFailureAction(error))
     }
 }
 

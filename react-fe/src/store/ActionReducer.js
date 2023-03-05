@@ -1,28 +1,24 @@
 import { AUTH_REQUEST, AUTH_SUCCESS, AUTH_FAILURE } from './TypeReducer';
 import { AUTH_TOKEN } from '../common/AuthToken';
 
-export const authRequest = () => {
-    return dispatch => {
-        dispatch({
-            type: AUTH_REQUEST
-        });
-    }
+export const authenticateAction = () => {
+    return {
+        type: AUTH_REQUEST
+    };
 }
-export const authSuccess = (token, username, role, message) => {
-    localStorage.setItem(AUTH_TOKEN, token);
+
+export const authSuccessAction = (payload) => {
+    localStorage.setItem(AUTH_TOKEN, payload.token);
     return {
         type: AUTH_SUCCESS,
-        token: token,
-        username: username,
-        role: role,
-        message: message
+        payload
     }
 };
 
-export const loginFailure = (error) => {
+export const authFailureAction = (error) => {
     localStorage.removeItem(AUTH_TOKEN);
     return {
         type: AUTH_FAILURE,
-        error: error
+        error
     }
 };

@@ -79,12 +79,7 @@ class ChangeInformationComponent extends Component {
 
     render() {
 
-        const { validated, imgSrc } = this.state;
-
-        // if (this.state.redirect) {
-        //     return <Navigate to="/todo" />;
-        // }
-        // import { BrowserRouter, Routes, Route } from "react-router-dom";
+        const { validated } = this.state;
 
         return (
             <>

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import NavbarComponent from "./fragments/NavbarComponent";
+import FooterComponent from "./fragments/FooterComponent";
 import { Outlet } from "react-router-dom";
 import { Container } from 'react-bootstrap';
 import { ToastContainer } from 'react-toastify';
@@ -9,13 +10,15 @@ class Layout extends Component {
     render() {
         return (
             <>
-                <Container>
+                <Container fluid="lg">
 
                     <NavbarComponent />
 
-                    <Container fluid>
+                    <Container>
                         <Outlet />
                     </Container>
+
+                    <FooterComponent />
 
                     <ToastContainer
                         position="bottom-center"
@@ -37,5 +40,3 @@ class Layout extends Component {
 }
 
 export default Layout;
-
-//<Link to="/product">Dashboard</Link>

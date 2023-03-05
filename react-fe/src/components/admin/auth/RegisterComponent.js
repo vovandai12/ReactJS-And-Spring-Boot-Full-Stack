@@ -13,21 +13,9 @@ class RegisterComponent extends Component {
         validated: false,
     }
 
-    handleChangeUsername = (event) => {
+    handleChange = (event) => {
         this.setState({
-            username: event.target.value
-        })
-    };
-
-    handleChangeEmail = (event) => {
-        this.setState({
-            email: event.target.value
-        })
-    };
-
-    handleChangePassword = (event) => {
-        this.setState({
-            password: event.target.value
+            [event.target.name]: event.target.value
         })
     };
 
@@ -83,7 +71,8 @@ class RegisterComponent extends Component {
                                         <Form.Label>Username:</Form.Label>
                                         <Form.Control type="text" placeholder="Enter username"
                                             value={this.state.username}
-                                            onChange={(event) => this.handleChangeUsername(event)}
+                                            name="username"
+                                            onChange={(event) => this.handleChange(event)}
                                             required />
                                         <Form.Control.Feedback type="invalid">Please enter a username.</Form.Control.Feedback>
                                     </Form.Group>
@@ -92,7 +81,8 @@ class RegisterComponent extends Component {
                                         <Form.Label>Email</Form.Label>
                                         <Form.Control type="email" placeholder="Enter email"
                                             value={this.state.email}
-                                            onChange={(event) => this.handleChangeEmail(event)}
+                                            name="email"
+                                            onChange={(event) => this.handleChange(event)}
                                             required />
                                         <Form.Control.Feedback type="invalid">Please enter a valid email address.</Form.Control.Feedback>
                                     </Form.Group>
@@ -101,7 +91,8 @@ class RegisterComponent extends Component {
                                         <Form.Label>Password</Form.Label>
                                         <Form.Control type="password" placeholder="Enter password"
                                             value={this.state.password}
-                                            onChange={(event) => this.handleChangePassword(event)}
+                                            name="password"
+                                            onChange={(event) => this.handleChange(event)}
                                             required />
                                         <Form.Control.Feedback type="invalid">Please enter a password.</Form.Control.Feedback>
                                     </Form.Group>
