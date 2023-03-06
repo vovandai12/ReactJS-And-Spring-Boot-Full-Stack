@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import com.example.springbootbe.common.Role;
 import com.example.springbootbe.component.JwtTokenProvider;
 import com.example.springbootbe.model.User;
@@ -23,6 +23,7 @@ import com.example.springbootbe.payload.request.LoginRequest;
 import com.example.springbootbe.payload.request.RegisterRequest;
 import com.example.springbootbe.payload.response.AuthResponse;
 import com.example.springbootbe.payload.response.MessageResponse;
+import com.example.springbootbe.payload.response.UsernameResponse;
 import com.example.springbootbe.service.CustomUserDetailsService;
 import com.example.springbootbe.service.UserService;
 
@@ -78,10 +79,10 @@ public class AuthController {
 						userOld.get().getUserName() + " registered successfully. Please login to continue!"));
 	}
 
-	@GetMapping(value = "/check-token")
-	public ResponseEntity<?> getUsername(@RequestBody String token) {
+	@GetMapping(value = "/get-username-token")
+	public ResponseEntity<UsernameResponse> getUsername(@RequestParam(name = "token") String token) {
 		String username = tokenProvider.getUserNameFromJwtToken(token);
-		return ResponseEntity.status(HttpStatus.OK).body(username);
+		return ResponseEntity.status(HttpStatus.OK).body(new UsernameResponse(username));
 	}
 
 }

@@ -4,11 +4,13 @@ import { NavLink, Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import { authenticateAction, authFailureAction } from '../../../store/ActionReducer';
+import AuthService from "../../../service/admin/AuthService";
 
 class NavbarComponent extends Component {
 
     state = {
-        redirect: false
+        redirect: false,
+        username: ''
     }
 
     handleLogout = () => {
@@ -17,6 +19,12 @@ class NavbarComponent extends Component {
         toast.success("Signed out successfully");
         this.setState({
             redirect: true
+        })
+    }
+
+    componentDidMount() {
+        AuthService.getUsername().then(response => {
+            console.log("🚀 ~ file: NavbarComponent.js:28 ~ NavbarComponent ~ AuthService.getUsername ~ response:", response)
         })
     }
 

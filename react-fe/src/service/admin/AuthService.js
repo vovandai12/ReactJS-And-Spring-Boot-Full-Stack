@@ -1,4 +1,5 @@
-import http from '../../common/HttpCommon'
+import http from '../../common/HttpCommon';
+import { TOKEN } from '../../common/AuthToken';
 
 const AuthService = {
     async register(data) {
@@ -15,6 +16,10 @@ const AuthService = {
                 "Content-Type": "multipart/form-data",
             }
         });
+    },
+
+    async getUsername() {
+        return await http.get(`/auth/get-username-token?token=${TOKEN}`);
     }
 }
 
