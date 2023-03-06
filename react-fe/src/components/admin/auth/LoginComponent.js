@@ -35,11 +35,20 @@ class LoginComponent extends Component {
             }
             AuthService.login(data)
                 .then(response => {
-                    toast.success(response.data.message);
-                    this.props.authSuccess(response.data);
-                    this.setState({
-                        redirect: true
-                    })
+                    if (response.data.role === 'ROLE_USER') {
+                        this.props.authFailure("Authentication Failed.Bad Credentials");
+                        toast.error("Authentication Failed.Only admin has access");
+                        this.setState({
+                            username: '',
+                            password: ''
+                        })
+                    } else {
+                        toast.success(response.data.message);
+                        this.props.authSuccess(response.data);
+                        this.setState({
+                            redirect: true
+                        })
+                    }
                 })
                 .catch(error => {
                     if (error && error.response) {
@@ -62,6 +71,9 @@ class LoginComponent extends Component {
         const { validated, redirect } = this.state;
 
         if (redirect) {
+            this.setState({
+                redirect: false
+            })
             return <Navigate to="/" />
         }
 

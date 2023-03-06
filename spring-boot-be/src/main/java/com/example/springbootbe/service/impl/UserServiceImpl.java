@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.springbootbe.model.User;
@@ -17,8 +18,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public Optional<User> saveOrUpdate(User user) {
+        if (user.getId().equals("")) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         User userOld = userRepository.save(user);
         return Optional.of(userOld);
     }

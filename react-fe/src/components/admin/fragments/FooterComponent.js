@@ -10,9 +10,6 @@ class FooterComponent extends Component {
             <>
                 <Card className="mt-3">
                     <ListGroup variant="flush">
-                        <ListGroup.Item>Token:</ListGroup.Item>
-                        <ListGroup.Item>Username: </ListGroup.Item>
-                        <ListGroup.Item>Role: </ListGroup.Item>
                         <ListGroup.Item>localStorage: {localStorage.getItem(AUTH_TOKEN)}</ListGroup.Item>
                     </ListGroup>
                 </Card>

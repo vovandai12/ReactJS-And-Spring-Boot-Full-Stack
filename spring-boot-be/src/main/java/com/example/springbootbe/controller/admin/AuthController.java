@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,6 +63,7 @@ public class AuthController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageResponse("Email has been used!"));
 		}
 		User user = new User();
+		user.setId("");
 		user.setUserName(registerRequest.getUserName());
 		user.setEmail(registerRequest.getEmail());
 		user.setPassword(registerRequest.getPassword());
@@ -74,6 +76,12 @@ public class AuthController {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new MessageResponse(
 						userOld.get().getUserName() + " registered successfully. Please login to continue!"));
+	}
+
+	@GetMapping(value = "/check-token")
+	public ResponseEntity<?> getUsername(@RequestBody String token) {
+		String username = tokenProvider.getUserNameFromJwtToken(token);
+		return ResponseEntity.status(HttpStatus.OK).body(username);
 	}
 
 }
