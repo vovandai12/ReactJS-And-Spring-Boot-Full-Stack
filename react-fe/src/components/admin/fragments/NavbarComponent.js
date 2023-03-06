@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import { authenticateAction, authFailureAction } from '../../../store/ActionReducer';
 import AuthService from "../../../service/admin/AuthService";
+import { TOKEN } from '../../../common/AuthToken';
 
 class NavbarComponent extends Component {
 
@@ -23,14 +24,22 @@ class NavbarComponent extends Component {
     }
 
     componentDidMount() {
-        AuthService.getUsername().then(response => {
-            console.log("🚀 ~ file: NavbarComponent.js:28 ~ NavbarComponent ~ AuthService.getUsername ~ response:", response)
-        })
+        if (TOKEN === '') {
+            this.setState({
+                redirect: true
+            })
+        } else {
+            AuthService.getUsername(TOKEN).then(response => {
+                this.setState({
+                    username: response.data.username
+                })
+            })
+        }
     }
 
     render() {
 
-        const { redirect } = this.state;
+        const { redirect, username } = this.state;
         if (redirect) {
             this.setState({
                 redirect: false
@@ -51,12 +60,19 @@ class NavbarComponent extends Component {
                             <Nav.Link href="">Product</Nav.Link>
                             <Nav.Link href="">Invoice</Nav.Link>
                             <Nav.Link href="">Order</Nav.Link>
-                            <NavDropdown title="Account" id="basic-nav-dropdown">
-                                <NavDropdown.Item as={NavLink} to="/login">Login</NavDropdown.Item>
-                                <NavDropdown.Item as={NavLink} to="/register">Register</NavDropdown.Item>
-                                <NavDropdown.Item as={NavLink} to="/change-information">Change information</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={() => this.handleLogout()}>Logout</NavDropdown.Item>
+                            <NavDropdown title={username === '' ? 'Account' : username} id="basic-nav-dropdown">
+                                {username === '' ?
+                                    <>
+                                        <NavDropdown.Item as={NavLink} to="/login">Login</NavDropdown.Item>
+                                        <NavDropdown.Item as={NavLink} to="/register">Register</NavDropdown.Item>
+                                    </>
+                                    :
+                                    <>
+                                        <NavDropdown.Item as={NavLink} to="/change-information">Change information</NavDropdown.Item>
+                                        <NavDropdown.Divider />
+                                        <NavDropdown.Item onClick={() => this.handleLogout()}>Logout</NavDropdown.Item>
+                                    </>
+                                }
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>

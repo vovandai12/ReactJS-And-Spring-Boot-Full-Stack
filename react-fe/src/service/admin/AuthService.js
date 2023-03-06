@@ -1,5 +1,4 @@
 import http from '../../common/HttpCommon';
-import { TOKEN } from '../../common/AuthToken';
 
 const AuthService = {
     async register(data) {
@@ -18,8 +17,8 @@ const AuthService = {
         });
     },
 
-    async getUsername() {
-        return await http.get(`/auth/get-username-token?token=${TOKEN}`);
+    async getUsername(token) {
+        return await http.get(`/auth/get-username-token?token=${token}`);
     }
 }
 

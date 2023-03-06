@@ -11,44 +11,21 @@ class ChangeInformationComponent extends Component {
         address: '',
         birthDay: '',
         gender: '',
-        file: '',
+        file: {},
         imgSrc: '',
         validated: false,
     }
 
-    handleChangeFirstName = (event) => {
+    handleChange = (event) => {
         this.setState({
-            firstName: event.target.value
-        })
-    };
-
-    handleChangeLastName = (event) => {
-        this.setState({
-            lastName: event.target.value
-        })
-    };
-
-    handleChangeAddress = (event) => {
-        this.setState({
-            address: event.target.value
-        })
-    };
-
-    handleChangeBirthDay = (event) => {
-        this.setState({
-            birthDay: event.target.value
-        })
-    };
-
-    handleChangeGender = (event) => {
-        this.setState({
-            gender: event.target.checked
+            [event.target.name]: event.target.value
         })
     };
 
     handleChangeImgSrc = (event) => {
         if (event.target.files && event.target.files.length > 0) {
             this.setState({
+                file: event.target.files[0],
                 imgSrc: URL.createObjectURL(event.target.files[0])
             })
         }
@@ -79,7 +56,7 @@ class ChangeInformationComponent extends Component {
 
     render() {
 
-        const { validated } = this.state;
+        const { validated, imgSrc } = this.state;
 
         return (
             <>
@@ -93,7 +70,8 @@ class ChangeInformationComponent extends Component {
                                         <Form.Label>First name:</Form.Label>
                                         <Form.Control type="text" placeholder="Enter first name"
                                             value={this.state.firstName}
-                                            onChange={(event) => this.handleChangeFirstName(event)}
+                                            name="firstName"
+                                            onChange={(event) => this.handleChange(event)}
                                             required />
                                         <Form.Control.Feedback type="invalid">Please enter a first name.</Form.Control.Feedback>
                                     </Form.Group>
@@ -102,7 +80,8 @@ class ChangeInformationComponent extends Component {
                                         <Form.Label>Last name:</Form.Label>
                                         <Form.Control type="text" placeholder="Enter last name"
                                             value={this.state.lastName}
-                                            onChange={(event) => this.handleChangeLastName(event)}
+                                            name="lastName"
+                                            onChange={(event) => this.handleChange(event)}
                                             required />
                                         <Form.Control.Feedback type="invalid">Please enter a last name.</Form.Control.Feedback>
                                     </Form.Group>
@@ -111,42 +90,44 @@ class ChangeInformationComponent extends Component {
                                         <Form.Label>Address:</Form.Label>
                                         <Form.Control type="text" placeholder="Enter address"
                                             value={this.state.address}
-                                            onChange={(event) => this.handleChangeAddress(event)}
+                                            name="address"
+                                            onChange={(event) => this.handleChange(event)}
                                             required />
                                         <Form.Control.Feedback type="invalid">Please enter a address.</Form.Control.Feedback>
                                     </Form.Group>
 
                                     <Form.Group controlId="birthDay">
                                         <Form.Label>Birth day:</Form.Label>
-                                        <Form.Control type="text" placeholder="Enter birthDay"
+                                        <Form.Control type="date" placeholder="Enter birthDay"
                                             value={this.state.birthDay}
-                                            onChange={(event) => this.handleChangeBirthDay(event)}
+                                            name="birthDay"
+                                            onChange={(event) => this.handleChange(event)}
                                             required />
                                         <Form.Control.Feedback type="invalid">Please enter a birthDay.</Form.Control.Feedback>
                                     </Form.Group>
 
                                     <Form.Group controlId="gender">
                                         <Form.Label>Gender:</Form.Label>
-                                        <div onChange={(event) => this.handleChangeGender(event)}>
-                                            <Form.Check inline label="Male" name="gender" type="radio" id="inline1" checked value="true" />
-                                            <Form.Check inline label="Female" name="gender" type="radio" id="inline2" value="false" />
+                                        <div key="inline">
+                                            <Form.Check inline label="Male" name="gender" type="radio" id="inline1" value="true"
+                                                onChange={(event) => this.handleChange(event)} />
+                                            <Form.Check inline label="Female" name="gender" type="radio" id="inline2" value="false"
+                                                onChange={(event) => this.handleChange(event)} />
                                         </div>
                                     </Form.Group>
 
-                                    {/* <Form.Group controlId="imgSrc">
-                                <Form.Label>Avatar:</Form.Label>
-                                <Form.File id="imgSrc" onChange={(event) => this.handleChangeImgSrc(event)} />
-                            </Form.Group> */}
-                                    {/* <Form.Group>
-                                <Form.File id="imgSrc" label="Example file input" onChange={(event) => this.handleChangeImgSrc(event)} />
-                            </Form.Group>
-                            {imgSrc !== '' &&
-                                (
-                                    <Card style={{ width: '18rem' }}>
-                                        <Card.Img variant="top" src={imgSrc} alt="avatar" />
-                                    </Card>
-                                )
-                            } */}
+                                    <div className="form-group">
+                                        <label>Avatar:</label>
+                                        <input type="file" className="form-control-file" id="imgSrc"
+                                            onChange={(event) => this.handleChangeImgSrc(event)} />
+                                    </div>
+                                    {imgSrc !== '' &&
+                                        (
+                                            <Card style={{ width: '18rem' }}>
+                                                <Card.Img variant="top" src={imgSrc} alt="avatar" />
+                                            </Card>
+                                        )
+                                    }
                                 </Card.Body>
                                 <Card.Footer>
                                     <Button variant="primary" type="submit">
