@@ -15,6 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ChangeInformationRequest {
 
+	private String userName;
 	private String firstName;
 	private String lastName;
 	private String address;

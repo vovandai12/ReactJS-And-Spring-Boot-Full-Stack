@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Form, Button, Row, Col, Card } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import AuthService from "../../../service/admin/AuthService";
+import { connect } from 'react-redux';
+import { authenticateAction, authSuccessAction, authFailureAction } from '../../../store/ActionReducer';
+import { Navigate } from "react-router-dom";
 
 class ChangeInformationComponent extends Component {
 
@@ -14,6 +17,7 @@ class ChangeInformationComponent extends Component {
         file: {},
         imgSrc: '',
         validated: false,
+        redirect: false
     }
 
     handleChange = (event) => {
@@ -38,15 +42,26 @@ class ChangeInformationComponent extends Component {
             event.stopPropagation();
         } else {
             event.preventDefault();
+            this.props.authenticate();
             const data = {
 
             }
             AuthService.changeInformation(data)
                 .then(function (response) {
                     toast.success(response.message);
+                    this.props.authFailure('');
+                    this.setState({
+                        redirect: true
+                    })
                 })
                 .catch(function (error) {
-                    toast.error(error);
+                    if (error && error.response) {
+                        this.props.authFailure("Error update information");
+                        toast.error("Error update information");
+                        this.setState({
+
+                        })
+                    }
                 })
         }
         this.setState({
@@ -56,7 +71,14 @@ class ChangeInformationComponent extends Component {
 
     render() {
 
-        const { validated, imgSrc } = this.state;
+        const { validated, imgSrc, redirect } = this.state;
+
+        if (redirect) {
+            this.setState({
+                redirect: false
+            })
+            return <Navigate to="/" />
+        }
 
         return (
             <>
@@ -143,4 +165,20 @@ class ChangeInformationComponent extends Component {
     }
 }
 
-export default ChangeInformationComponent;
+const mapStateToProps = (state) => {
+    return {
+        user: state.user,
+        error: state.error,
+        isAuthenticated: state.isAuthenticated
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        authenticate: () => dispatch(authenticateAction()),
+        authSuccess: (data) => dispatch(authSuccessAction(data)),
+        authFailure: (error) => dispatch(authFailureAction(error))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChangeInformationComponent);

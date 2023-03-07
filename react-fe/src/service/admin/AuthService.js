@@ -1,4 +1,5 @@
 import http from '../../common/HttpCommon';
+import { TOKEN } from '../../common/AuthToken';
 
 const AuthService = {
     async register(data) {
@@ -13,6 +14,7 @@ const AuthService = {
         return await http.post('/auth/change-information', data, {
             headers: {
                 "Content-Type": "multipart/form-data",
+                "Authorization": "Bearer " + TOKEN
             }
         });
     },

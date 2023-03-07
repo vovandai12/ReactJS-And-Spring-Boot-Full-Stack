@@ -60,13 +60,14 @@ public class WebSecurityConfig {
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				// Cho phép tất cả mọi người truy cập vào địa chỉ này
 				.authorizeRequests()
-				.antMatchers(
-						"/api/auth/**")
+				.antMatchers("/api/auth/**")
 				.permitAll()
 				// Tất cả các request người dùng mới được truy cập
 				.antMatchers()
 				.access("hasRole('ROLE_USER')")
-				.antMatchers("/api/users/**")
+				.antMatchers(
+						"/api/users/**",
+						"/api/accounts/**")
 				.access("hasRole('ROLE_ADMIN')")
 				// Tất cả các request khác đều cần phải xác thực mới được truy cập
 				.anyRequest().authenticated();
