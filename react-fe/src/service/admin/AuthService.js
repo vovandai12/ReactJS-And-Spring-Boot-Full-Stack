@@ -1,5 +1,4 @@
 import http from '../../common/HttpCommon';
-import { TOKEN } from '../../common/AuthToken';
 
 const AuthService = {
     async register(data) {
@@ -8,15 +7,6 @@ const AuthService = {
 
     async login(data) {
         return await http.post('/auth/login', data);
-    },
-
-    async changeInformation(data) {
-        return await http.post('/auth/change-information', data, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-                "Authorization": "Bearer " + TOKEN
-            }
-        });
     },
 
     async getUsername(token) {

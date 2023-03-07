@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { Form, Button, Row, Col, Card } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import AccountService from "../../../service/admin/AccountService";
 import AuthService from "../../../service/admin/AuthService";
 import { connect } from 'react-redux';
 import { authenticateAction, authSuccessAction, authFailureAction } from '../../../store/ActionReducer';
 import { Navigate } from "react-router-dom";
+import { TOKEN } from '../../../common/AuthToken';
 
 class ChangeInformationComponent extends Component {
 
@@ -17,7 +19,22 @@ class ChangeInformationComponent extends Component {
         file: {},
         imgSrc: '',
         validated: false,
-        redirect: false
+        redirect: false,
+        username: ''
+    }
+
+    componentDidMount() {
+        if (TOKEN === '') {
+            this.setState({
+                redirect: true
+            })
+        } else {
+            AuthService.getUsername(TOKEN).then(response => {
+                this.setState({
+                    username: response.data.username
+                })
+            })
+        }
     }
 
     handleChange = (event) => {
@@ -43,10 +60,15 @@ class ChangeInformationComponent extends Component {
         } else {
             event.preventDefault();
             this.props.authenticate();
-            const data = {
-
-            }
-            AuthService.changeInformation(data)
+            const data = new FormData();
+            data.append('userName', this.state.username);
+            data.append('firstName', this.state.firstName);
+            data.append('lastName', this.state.lastName);
+            data.append('address', this.state.address);
+            data.append('birthDay', new Date(this.state.birthDay));
+            data.append('gender', this.state.gender === 'true' ? true : false);
+            data.append('file', this.state.file);
+            AccountService.changeInformation(data)
                 .then(function (response) {
                     toast.success(response.message);
                     this.props.authFailure('');
@@ -59,7 +81,13 @@ class ChangeInformationComponent extends Component {
                         this.props.authFailure("Error update information");
                         toast.error("Error update information");
                         this.setState({
-
+                            firstName: '',
+                            lastName: '',
+                            address: '',
+                            birthDay: '',
+                            gender: '',
+                            file: {},
+                            imgSrc: ''
                         })
                     }
                 })
