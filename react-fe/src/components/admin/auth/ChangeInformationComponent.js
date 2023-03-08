@@ -16,11 +16,11 @@ class ChangeInformationComponent extends Component {
         address: '',
         birthDay: '',
         gender: '',
-        file: {},
         imgSrc: '',
+        username: '',
+        file: {},
         validated: false,
-        redirect: false,
-        username: ''
+        redirect: false
     }
 
     componentDidMount() {
@@ -30,8 +30,11 @@ class ChangeInformationComponent extends Component {
             })
         } else {
             AuthService.getUsername(TOKEN).then(response => {
-                this.setState({
-                    username: response.data.username
+
+                const usernameOld = response.data.username;
+
+                AccountService.getUserByUsername(usernameOld).then(response => {
+                    this.setState(response.data)
                 })
             })
         }
@@ -65,7 +68,7 @@ class ChangeInformationComponent extends Component {
             data.append('firstName', this.state.firstName);
             data.append('lastName', this.state.lastName);
             data.append('address', this.state.address);
-            data.append('birthDay', new Date(this.state.birthDay));
+            data.append('birthDay', this.state.birthDay);
             data.append('gender', this.state.gender === 'true' ? true : false);
             data.append('file', this.state.file);
             AccountService.changeInformation(data)
@@ -78,7 +81,6 @@ class ChangeInformationComponent extends Component {
                 })
                 .catch(function (error) {
                     if (error && error.response) {
-                        this.props.authFailure("Error update information");
                         toast.error("Error update information");
                         this.setState({
                             firstName: '',
@@ -112,7 +114,8 @@ class ChangeInformationComponent extends Component {
             <>
                 <Row className="mt-3">
                     <Col md={{ span: 6, offset: 3 }}>
-                        <Form noValidate validated={validated} onSubmit={(event) => this.onSubmit(event)}>
+                        <Form noValidate validated={validated}
+                            onSubmit={(event) => this.onSubmit(event)}>
                             <Card>
                                 <Card.Header>Change Information</Card.Header>
                                 <Card.Body>

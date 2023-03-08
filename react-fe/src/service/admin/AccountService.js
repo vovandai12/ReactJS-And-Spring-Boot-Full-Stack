@@ -4,10 +4,17 @@ import { TOKEN } from '../../common/AuthToken';
 const AccountService = {
 
     async changeInformation(data) {
-        return await http.post('/auth/accounts/change-information', data, {
+        return await http.post('/accounts/change-information', data, {
             headers: {
-                "Content-Type": "multipart/form-data",
-                "Authorization": "Bearer " + TOKEN
+                'Authorization': 'Bearer ' + TOKEN
+            }
+        });
+    },
+
+    async getUserByUsername(username) {
+        return await http.get(`/accounts/by-username?username=${username}`, {
+            headers: {
+                'Authorization': 'Bearer ' + TOKEN
             }
         });
     }

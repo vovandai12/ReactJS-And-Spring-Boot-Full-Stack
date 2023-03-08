@@ -10,17 +10,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.springbootbe.exception.StorageFileNotFoundException;
 import com.example.springbootbe.model.User;
 import com.example.springbootbe.payload.request.ChangeInformationRequest;
 import com.example.springbootbe.payload.response.MessageResponse;
+import com.example.springbootbe.payload.response.UserResponse;
 import com.example.springbootbe.service.StorageService;
 import com.example.springbootbe.service.UserService;
 
@@ -36,7 +38,10 @@ public class AccountController {
 	private StorageService storageService;
 
 	@PostMapping(value = "/change-information")
-	public ResponseEntity<?> changeInformation(@RequestBody ChangeInformationRequest changeInformationRequest) {
+	public ResponseEntity<?> changeInformation(@ModelAttribute ChangeInformationRequest changeInformationRequest) {
+		System.out.println(changeInformationRequest.getUserName());
+		System.out.println(changeInformationRequest.getFirstName());
+		System.out.println(changeInformationRequest.getFile());
 		User user = userService.findByUserName(changeInformationRequest.getUserName()).get();
 		user.setFirstName(changeInformationRequest.getFirstName());
 		user.setLastName(changeInformationRequest.getLastName());
@@ -53,6 +58,12 @@ public class AccountController {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new MessageResponse("Changed user " + userOld.get().getUserName()
 						+ " information successfully. Please log in again"));
+	}
+
+	@GetMapping(value = "/by-username")
+	public ResponseEntity<UserResponse> getUserByUsername(@RequestParam(name = "username") String username) {
+		User user = userService.findByUserName(username).get();
+		return ResponseEntity.status(HttpStatus.OK).body(new UserResponse(user));
 	}
 
 	@GetMapping(value = "/images/{filename:.+}")
